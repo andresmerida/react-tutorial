@@ -1,58 +1,32 @@
-import { useState } from "react";
-import { UserDetails } from "./components/UserDetails";
+import { useState, useEffect } from "react";
 
 export default function App() {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [counter, setCounter] = useState(3);
+  const [counter, setCounter] = useState(0);
+  const [sync, setSync] = useState(false);
 
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      username: 'anson',
-      email: 'anson@gmail.com',
-    },
-    {
-      id: 2,
-      username: 'mike',
-      email: 'mike@gmail.com',
-    },
-  ]);
+  useEffect(() => {
+    console.log('Rendering...');
+    document.title = "React Tutorial ";
+  }, [sync]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        const data = await response.json();
+        console.log(data);
+      } catch(err) {
+        console.log(err);
+      }
+    }
+    fetchUsers();
+  });
+
   return (
     <div>
-      <form onSubmit={ (e) => {
-        e.preventDefault();
-        const newUser = {
-          id: counter,
-          username,
-          email,
-        };
-        setCounter((currentCounter) => currentCounter + 1);
-        setUsers((currentUsersState) => [...currentUsersState, newUser]);
-
-        setUsername('');
-        setEmail('');
-      }}>
-        <div>
-          <label htmlFor="username">Username: </label>
-          <input name="username" id="username"
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email: </label>
-          <input name="email" id="email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <button>Add user</button>
-      </form>
-      <br/>
-      { users.map((user, index) => (
-        <UserDetails key={index} user={user} setUsers={setUsers}/>
-      ))}
+      <div>Yo clicked the button {counter} times</div>
+      <button onClick={() => setCounter((counter) => counter + 1)}>Click Me</button>
+      <button onClick={() => setSync((current) => !current)}>Sync</button>
     </div>
   );
 }
