@@ -9,7 +9,7 @@ export function PostContentButtons() {
       {id}
       <br/>
       <button onClick={() => {
-        setUserData((currentUser) => ({ ...currentUser, displayName: 'Display Name Update from component child'}))
+        setUserData((currentUser) => ({ ...currentUser, name: 'Display Name Update from component child'}))
       }}>Click Me</button>
     </div>
   );
